@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico Médico</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='doctor.ico') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#chat-form').submit(function (event) {
+                event.preventDefault();
+                const userInput = $('#userQuestion').val();
+                const symptoms = userInput.split(',').map(symptom => symptom.trim());
+
+                $.ajax({
+                    url: '/predict',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ symptoms: symptoms }),
+                    success: function (data) {
+                        let responseText = '';
+                        data.disease_probabilities.forEach(([disease, probability]) => {
+                            responseText += `${disease}: ${probability.toFixed(2)}<br>`;
+                        });
+                        $('#chatbotResponse').html(responseText);
+                    }
+                });
+            });
+
+            // Función para el botón de reinicio
+            $('#reset-button').click(function () {
+                location.reload();
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <!-- Animación de Fondo -->
+    <div class="container">
+        <div class="bubbles">
+            <!-- Burbujas para animación de fondo -->
+            <span style="--i: 11;"></span>
+            <span style="--i: 12;"></span>
+            <span style="--i: 24;"></span>
+            <span style="--i: 10;"></span>
+            <span style="--i: 14;"></span>
+            <span style="--i: 23;"></span>
+            <span style="--i: 18;"></span>
+            <span style="--i: 16;"></span>
+            <span style="--i: 19;"></span>
+            <span style="--i: 20;"></span>
+            <span style="--i: 22;"></span>
+            <span style="--i: 25;"></span>
+            <span style="--i: 18;"></span>
+            <span style="--i: 21;"></span>
+            <span style="--i: 15;"></span>
+            <span style="--i: 13;"></span>
+            <span style="--i: 26;"></span>
+            <span style="--i: 17;"></span>
+            <span style="--i: 13;"></span>
+            <span style="--i: 28;"></span>
+        </div>
+
+        <!-- Contenedor del Chatbot -->
+        <div class="chatbot-container">
+            <h1>Diagnóstico Médico</h1>
+            <h2>¿Qué quieres saber?</h2>
+            <form id="chat-form">
+                <textarea id="userQuestion" placeholder="Escribe tu pregunta aquí..." required></textarea>
+                <!-- Contenedor para los botones -->
+                <div class="button-container">
+                    <button type="submit">Preguntar</button>
+                    <button id="reset-button" type="button">Resetear</button>
+                </div>
+            </form>
+            <div id="chatbotResponse" class="response-box">
+                La respuesta aparecerá aquí...
+            </div>
+        </div>
+
+
+        <!-- Nuevo Formulario con Lista de Nombres -->
+        <div class="names-form-container">
+            <h2>*Leyenda*</h2>
+            <ul class="names-list">
+                <li>Vomitos</li>
+                <li>Ojos_Hundidos</li>
+                <li>Deshidratacion</li>
+                <li>Diarrea</li>
+                <li>Escalofrios</li>
+                <li>Fatiga</li>
+                <li>Fiebre_Alta</li>
+                <li>Dolor_de_Cabeza</li>
+                <li>Nauseas</li>
+                <li>Dolor_de_Espalda</li>
+                <!-- Agrega más nombres aquí -->
+                <li>Dolor_Muscular</li>
+                <li>Manchas_Rojas_en_el_Cuerpo</li>
+                <li>Perdida_de_Peso</li>
+                <li>Obesidad</li>
+                <li>Ardor_al_orinar</li>
+                <li>Picazon</li>
+                <li>Tos</li>
+                <li>Mareos</li>
+                <li>Deprecion</li>
+                <li>Dolor_en_el_Pecho</li>
+                <li>Mareos</li>
+                <li>Deprecion</li>
+                <li>Dolor_en_el_Pecho</li>
+                <li>Dolor_en_el_Pecho</li>
+            </ul>
+        </div>
+    </div>
+</body>
+
+</html>
